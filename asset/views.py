@@ -37,17 +37,18 @@ class BalanceView(LoginRequiredMixin,View):
 
 
 
-        #最古から最新の年リストを生成
+        #最古から最新の年リストを生成(決済日)
         dt          = datetime.datetime.now()
-        now_year    = dt.year
+        now_year    = dt.year #←最新の決算日の年を当てるべきでは？
         years       = []
 
-        balance     = Balance.objects.order_by("dt").first()
+        balance     = Balance.objects.order_by("pay_dt").first()
 
         #最古のデータがあれば最古のデータの年から今年までのリストを作る。(これがテンプレートのselectタグになる。)
         #なければ今年だけ表示
         if balance:
-            old_year    = balance.dt.year
+            old_year    = balance.pay_dt.year
+            print(old_year)
             for i in range(now_year,old_year-1,-1):
                 years.append(i)
         else:
